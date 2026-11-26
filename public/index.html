@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nyasarn't · Peta bus, kereta & CCTV Jakarta, biar nggak nyasar</title>
+  <meta name="description" content="Nyasarn't: peta langsung bus TransJakarta, KRL, MRT, LRT, dan CCTV Jakarta. Biar nggak nyasar.">
+  <meta name="theme-color" content="#cfe2ff">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <aside class="panel" id="panel">
+      <div class="grabber" id="grabber"></div>
+      <div class="panel-scroll" id="view"></div>
+      <nav class="tabbar" id="tabbar" aria-label="Menu utama">
+        <button data-tab="peta" class="on"><span class="ti ti-home"></span>Peta</button>
+        <button data-tab="rute"><span class="ti ti-route"></span>Rute</button>
+        <button data-tab="halte"><span class="ti ti-stop"></span>Halte</button>
+        <button data-tab="cctv"><span class="ti ti-cam"></span>CCTV</button>
+        <button data-tab="lainnya"><span class="ti ti-more"></span>Lainnya</button>
+      </nav>
+    </aside>
+
+    <main class="map-wrap">
+      <div id="map"></div>
+      <div class="map-controls">
+        <button id="btn3d" title="Tampilan 3D" aria-label="Tampilan 3D" aria-pressed="false">3D</button>
+        <button id="btnLocate" title="Lokasiku" aria-label="Tunjukkan lokasiku"><span class="ti ti-locate"></span></button>
+        <div class="stack">
+          <button id="btnZoomIn" title="Perbesar" aria-label="Perbesar peta">+</button>
+          <button id="btnZoomOut" title="Perkecil" aria-label="Perkecil peta">−</button>
+        </div>
+      </div>
+      <div class="clock-chip" id="clock"></div>
+      <button class="weather-chip" id="wx" hidden></button>
+      <div class="sheet-card" id="card" hidden></div>
+    </main>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box">
+      <div class="modal-head">
+        <div id="modalTitle"></div>
+        <button class="icon-btn" id="modalClose" title="Tutup" aria-label="Tutup video CCTV">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

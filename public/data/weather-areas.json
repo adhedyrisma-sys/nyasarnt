@@ -1,0 +1,313 @@
+{
+"source": "BMKG (api.bmkg.go.id)",
+"areas": [
+{
+"adm4": "31.71.01.1001",
+"kecamatan": "Gambir",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.17638,
+"lon": 106.82671
+},
+{
+"adm4": "31.71.02.1001",
+"kecamatan": "Sawah Besar",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.16603,
+"lon": 106.83448
+},
+{
+"adm4": "31.71.03.1001",
+"kecamatan": "Kemayoran",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.16472,
+"lon": 106.84538
+},
+{
+"adm4": "31.71.04.1001",
+"kecamatan": "Senen",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.1761,
+"lon": 106.83963
+},
+{
+"adm4": "31.71.05.1001",
+"kecamatan": "Cempaka Putih",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.176,
+"lon": 106.87175
+},
+{
+"adm4": "31.71.06.1001",
+"kecamatan": "Menteng",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.2009,
+"lon": 106.83392
+},
+{
+"adm4": "31.71.07.1001",
+"kecamatan": "Tanah Abang",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.21626,
+"lon": 106.80151
+},
+{
+"adm4": "31.71.08.1001",
+"kecamatan": "Johar Baru",
+"kota": "Kota Adm. Jakarta Pusat",
+"lat": -6.1857,
+"lon": 106.85703
+},
+{
+"adm4": "31.72.01.1001",
+"kecamatan": "Penjaringan",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.12204,
+"lon": 106.80002
+},
+{
+"adm4": "31.72.02.1001",
+"kecamatan": "Tanjung Priok",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.10887,
+"lon": 106.87915
+},
+{
+"adm4": "31.72.03.1001",
+"kecamatan": "Koja",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.10578,
+"lon": 106.89912
+},
+{
+"adm4": "31.72.04.1001",
+"kecamatan": "Cilincing",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.11075,
+"lon": 106.94515
+},
+{
+"adm4": "31.72.05.1001",
+"kecamatan": "Pademangan",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.14233,
+"lon": 106.84781
+},
+{
+"adm4": "31.72.06.1001",
+"kecamatan": "Kelapa Gading",
+"kota": "Kota Adm. Jakarta Utara",
+"lat": -6.1684,
+"lon": 106.90361
+},
+{
+"adm4": "31.73.01.1001",
+"kecamatan": "Cengkareng",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.13868,
+"lon": 106.72379
+},
+{
+"adm4": "31.73.02.1001",
+"kecamatan": "Grogol Petamburan",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.16185,
+"lon": 106.79433
+},
+{
+"adm4": "31.73.03.1001",
+"kecamatan": "Taman Sari",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.15358,
+"lon": 106.82453
+},
+{
+"adm4": "31.73.04.1001",
+"kecamatan": "Tambora",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.14463,
+"lon": 106.80885
+},
+{
+"adm4": "31.73.05.1001",
+"kecamatan": "Kebon Jeruk",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.195,
+"lon": 106.77213
+},
+{
+"adm4": "31.73.06.1001",
+"kecamatan": "Kalideres",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.14923,
+"lon": 106.69879
+},
+{
+"adm4": "31.73.07.1001",
+"kecamatan": "Pal Merah",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.20104,
+"lon": 106.78949
+},
+{
+"adm4": "31.73.08.1001",
+"kecamatan": "Kembangan",
+"kota": "Kota Adm. Jakarta Barat",
+"lat": -6.17232,
+"lon": 106.74251
+},
+{
+"adm4": "31.74.01.1001",
+"kecamatan": "Tebet",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.23382,
+"lon": 106.85552
+},
+{
+"adm4": "31.74.02.1001",
+"kecamatan": "Setiabudi",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.20742,
+"lon": 106.82584
+},
+{
+"adm4": "31.74.03.1001",
+"kecamatan": "Mampang Prapatan",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.24276,
+"lon": 106.82864
+},
+{
+"adm4": "31.74.04.1001",
+"kecamatan": "Pasar Minggu",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.28992,
+"lon": 106.83936
+},
+{
+"adm4": "31.74.05.1001",
+"kecamatan": "Kebayoran Lama",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.24614,
+"lon": 106.77685
+},
+{
+"adm4": "31.74.06.1001",
+"kecamatan": "Cilandak",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.29051,
+"lon": 106.79716
+},
+{
+"adm4": "31.74.07.1001",
+"kecamatan": "Kebayoran Baru",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.24559,
+"lon": 106.80225
+},
+{
+"adm4": "31.74.08.1001",
+"kecamatan": "Pancoran",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.24744,
+"lon": 106.84071
+},
+{
+"adm4": "31.74.09.1001",
+"kecamatan": "Jagakarsa",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.32537,
+"lon": 106.81925
+},
+{
+"adm4": "31.74.10.1001",
+"kecamatan": "Pesanggrahan",
+"kota": "Kota Adm. Jakarta Selatan",
+"lat": -6.25643,
+"lon": 106.75877
+},
+{
+"adm4": "31.75.01.1001",
+"kecamatan": "Matraman",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.2117,
+"lon": 106.86898
+},
+{
+"adm4": "31.75.02.1001",
+"kecamatan": "Pulogadung",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.18299,
+"lon": 106.8989
+},
+{
+"adm4": "31.75.03.1001",
+"kecamatan": "Jatinegara",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.21738,
+"lon": 106.86128
+},
+{
+"adm4": "31.75.04.1001",
+"kecamatan": "Kramatjati",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.27411,
+"lon": 106.87071
+},
+{
+"adm4": "31.75.05.1001",
+"kecamatan": "Pasar Rebo",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.30148,
+"lon": 106.85997
+},
+{
+"adm4": "31.75.06.1001",
+"kecamatan": "Cakung",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.20345,
+"lon": 106.91605
+},
+{
+"adm4": "31.75.07.1001",
+"kecamatan": "Duren Sawit",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.23328,
+"lon": 106.91572
+},
+{
+"adm4": "31.75.08.1001",
+"kecamatan": "Makasar",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.27577,
+"lon": 106.87703
+},
+{
+"adm4": "31.75.09.1001",
+"kecamatan": "Ciracas",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.32606,
+"lon": 106.87532
+},
+{
+"adm4": "31.75.10.1001",
+"kecamatan": "Cipayung",
+"kota": "Kota Adm. Jakarta Timur",
+"lat": -6.32906,
+"lon": 106.8939
+},
+{
+"adm4": "31.01.01.1001",
+"kecamatan": "Kepulauan Seribu Utara",
+"kota": "Administrasi Kepulauan Seribu",
+"lat": -5.73379,
+"lon": 106.59004
+},
+{
+"adm4": "31.01.02.1001",
+"kecamatan": "Kepulauan Seribu Selatan",
+"kota": "Administrasi Kepulauan Seribu",
+"lat": -5.98178,
+"lon": 106.73864
+}
+]
+}
