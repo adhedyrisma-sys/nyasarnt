@@ -47,7 +47,11 @@ test('kereta searah tidak bertumpuk di titik yang sama', () => {
   for (let sec = 5.5 * 3600; sec < 23 * 3600; sec += 97) {
     samples++;
     const seen = new Map();
-    for (const f of trainsNow(train, { sec })) seen.set(key(f), (seen.get(key(f)) || 0) + 1);
+    // kunci = posisi + jalur + arah (kereta berlawanan arah di stasiun yang sama itu wajar: beda peron)
+    for (const f of trainsNow(train, { sec })) {
+      const k = `${key(f)}|${f.properties.id.split('@')[0]}`;
+      seen.set(k, (seen.get(k) || 0) + 1);
+    }
     piles += [...seen.values()].filter((n) => n >= 2).length;
   }
   assert.ok(piles / samples < 0.05, `${piles} tumpukan dalam ${samples} sampel waktu`);

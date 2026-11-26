@@ -208,8 +208,7 @@ export function trainsNow(train, { sec }) {
         const st = profileAt(p, e);
         const d = dir === 1 ? st.d : l.length - st.d;
         const [pt0, brg0] = along(l.coords, l.cum, d);
-        const b = ((dir === 1 ? brg0 : brg0 + 180) * Math.PI) / 180;
-        const pt = [pt0[0] - (Math.cos(b) * 9) / M_LON, pt0[1] + (Math.sin(b) * 9) / M_LAT];
+        const pt = pt0; // tepat di geometri rel (tanpa geseran)
         feats.push({
           type: 'Feature', geometry: { type: 'Point', coordinates: pt },
           properties: { id: `${l.id}${dir}@${dep}`, line: l.id, mode: l.mode, color: l.color, name: l.name,

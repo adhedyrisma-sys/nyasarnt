@@ -167,3 +167,25 @@ export function routePill(color) {
   </svg>`;
   return rasterize(svg, 48, 48);
 }
+
+// Rangkaian kereta tampak atas (bergerbong), menghadap utara; panjangnya mengikuti jumlah gerbong.
+// 1 gerbong = 26 px gambar (pixelRatio 2 → 13 px layar pada icon-size 1 ≈ 20 m di zoom 15,7).
+export function trainConsist(color, cars = 8) {
+  const W = 22, CAR = 26, GAP = 2, H = cars * CAR + 8;
+  let body = '';
+  for (let i = 0; i < cars; i++) {
+    const y = 4 + i * CAR;
+    const first = i === 0, last = i === cars - 1;
+    const r = first || last ? 9 : 3;
+    body += `<rect x="3" y="${y + GAP / 2}" width="${W - 6}" height="${CAR - GAP}" rx="${r}" fill="${color}" stroke="#1d2238" stroke-opacity=".55" stroke-width="1.2"/>`;
+    // pita jendela & atap
+    body += `<rect x="6.5" y="${y + 5}" width="${W - 13}" height="${CAR - 10}" rx="2" fill="#fff" opacity=".28"/>`;
+    if (first) body += `<path d="M6 ${y + 9}C6 ${y + 5} 8 ${y + 3.5} 11 ${y + 3.5}S16 ${y + 5} 16 ${y + 9}z" fill="#1d2238" opacity=".8"/>`;
+    if (last) body += `<path d="M6 ${y + CAR - 9}C6 ${y + CAR - 5} 8 ${y + CAR - 3.5} 11 ${y + CAR - 3.5}S16 ${y + CAR - 5} 16 ${y + CAR - 9}z" fill="#1d2238" opacity=".55"/>`;
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">
+    <defs><filter id="s" x="-40%" y="-5%" width="180%" height="110%"><feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#1b2250" flood-opacity=".35"/></filter></defs>
+    <g filter="url(#s)"><rect x="1.5" y="2.5" width="${W - 3}" height="${H - 5}" rx="10" fill="#fff"/>${body}</g>
+  </svg>`;
+  return rasterize(svg, W, H);
+}

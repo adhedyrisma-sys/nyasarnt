@@ -1,5 +1,5 @@
 import { mascotImg } from './mascots.js';
-import { icon, cctvPin, trainTopView, routePill } from './icons.js';
+import { icon, cctvPin, trainConsist, routePill } from './icons.js';
 import { loadAreas, nearestArea, forecast, upcoming, rainNote, iconFor } from './weather.js';
 import { prepare, busesNow, trainsNow, nextTrains, nextBuses, stopGroup, jakartaNow, fmtClock, dist } from './sim.js';
 
@@ -86,6 +86,13 @@ function softenBasemap() {
     if (l.type === 'background') map.setPaintProperty(l.id, 'background-color', '#f3f6fc');
     if (/water/.test(l.id) && l.type === 'fill') map.setPaintProperty(l.id, 'fill-color', '#cfe2ff');
     if (/park|wood|grass/.test(l.id) && l.type === 'fill') map.setPaintProperty(l.id, 'fill-color', '#e2f3df');
+    // rel dari peta dasar: garis abu-abu tipis yang sudah tampil sejak zoom 10 (lintasan berwarna hanya saat dipilih)
+    if (/^railway/.test(l.id)) {
+      map.setLayerZoomRange(l.id, /transit|service/.test(l.id) ? 12 : 10, 24);
+      const dash = /dashline/.test(l.id);
+      map.setPaintProperty(l.id, 'line-color', dash ? '#f7f8fb' : '#c3c8d4');
+      map.setPaintProperty(l.id, 'line-width', ['interpolate', ['exponential', 1.4], ['zoom'], 10, dash ? 0.4 : 1, 14, dash ? 1.2 : 2.4, 18, dash ? 4 : 6]);
+    }
   }
 }
 
@@ -116,7 +123,9 @@ Promise.all([loaded, dataP]).then(async ([, [bus, train, cctv]]) => {
 
 async function addLayers() {
   map.addImage('cctv', await cctvPin(88), { pixelRatio: 2 });
-  await Promise.all(TRAIN.lines.map(async (l) => map.addImage(`train-${l.id}`, await trainTopView(l.color, 30), { pixelRatio: 2 })));
+  // rangkaian kereta seukuran asli: KRL 8 gerbong, MRT 6, LRT Jakarta 2, LRT Jabodebek 6
+  const CARS = { M: 6, S: 2, CB: 6, BK: 6 };
+  await Promise.all(TRAIN.lines.map(async (l) => map.addImage(`train-${l.id}`, await trainConsist(l.color, CARS[l.id] || 8), { pixelRatio: 2 })));
   // label pil per warna rute; melebar mengikuti panjang nama (mis. JAK.48A)
   await Promise.all([...new Set(BUS.routes.map((r) => r.color))].map(async (c) => map.addImage(`pill-${c}`, await routePill(c), {
     pixelRatio: 2, stretchX: [[22, 26]], stretchY: [[22, 26]], content: [14, 10, 34, 38],
@@ -128,17 +137,18 @@ async function addLayers() {
     return { type: 'Feature', properties: { id: r.id, color: r.color, kind: r.kind }, geometry: { type: 'LineString', coordinates: t ? BUS.shapes[t.shape] : [] } };
   });
   map.addSource('routes', { type: 'geojson', data: { type: 'FeatureCollection', features: routeLines } });
-  map.addLayer({ id: 'routes', type: 'line', source: 'routes', layout: { 'line-join': 'round', 'line-cap': 'round' },
-    paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 1, 15, 3], 'line-opacity': ['case', ['==', ['get', 'kind'], 'brt'], 0.55, 0.18] } });
   map.addLayer({ id: 'route-hl-casing', type: 'line', source: 'routes', filter: ['==', 'id', ''], layout: { 'line-join': 'round', 'line-cap': 'round' },
-    paint: { 'line-color': '#fff', 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 7, 15, 13] } });
+    paint: { 'line-color': '#fff', 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 4, 15, 9], 'line-opacity': 0.9 } });
   map.addLayer({ id: 'route-hl', type: 'line', source: 'routes', filter: ['==', 'id', ''], layout: { 'line-join': 'round', 'line-cap': 'round' },
-    paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 4, 15, 8] } });
+    paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 5] } });
 
   // jalur kereta
   map.addSource('rails', { type: 'geojson', data: { type: 'FeatureCollection', features: TRAIN.lines.map((l) => ({ type: 'Feature', properties: { id: l.id, color: l.color }, geometry: { type: 'LineString', coordinates: l.coords } })) } });
-  map.addLayer({ id: 'rails-casing', type: 'line', source: 'rails', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': '#fff', 'line-width': ['interpolate', ['linear'], ['zoom'], 9, 3, 15, 9] } });
-  map.addLayer({ id: 'rails', type: 'line', source: 'rails', layout: { 'line-join': 'round', 'line-cap': 'round' }, paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 9, 1.5, 15, 5], 'line-dasharray': [3, 1.2] } });
+  // lintasan kereta hanya muncul saat keretanya (atau jalurnya) dipilih
+  map.addLayer({ id: 'rail-hl-casing', type: 'line', source: 'rails', filter: ['==', 'id', ''], layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: { 'line-color': '#fff', 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 4, 15, 10], 'line-opacity': 0.9 } });
+  map.addLayer({ id: 'rail-hl', type: 'line', source: 'rails', filter: ['==', 'id', ''], layout: { 'line-join': 'round', 'line-cap': 'round' },
+    paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 15, 5] } });
 
   // halte
   map.addSource('stops', { type: 'geojson', data: { type: 'FeatureCollection', features: BUS.stops.map((s, i) => ({ type: 'Feature', id: i, properties: { i, name: s.name }, geometry: { type: 'Point', coordinates: [s.lon, s.lat] } })) } });
@@ -150,8 +160,8 @@ async function addLayers() {
 
   // stasiun
   map.addSource('stations', { type: 'geojson', data: { type: 'FeatureCollection', features: TRAIN.stations.map((s) => ({ type: 'Feature', properties: { name: s.name, lines: s.lines.join(',') }, geometry: { type: 'Point', coordinates: [s.lon, s.lat] } })) } });
-  map.addLayer({ id: 'stations', type: 'circle', source: 'stations', minzoom: 10,
-    paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 3, 15, 7], 'circle-color': '#fff', 'circle-stroke-color': '#1f2233', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10, 1.5, 15, 3] } });
+  map.addLayer({ id: 'stations', type: 'circle', source: 'stations', minzoom: 10.5,
+    paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 10.5, 2.5, 15, 6], 'circle-color': '#fff', 'circle-stroke-color': '#6b7189', 'circle-stroke-width': ['interpolate', ['linear'], ['zoom'], 10.5, 1.2, 15, 2.5] } });
   map.addLayer({ id: 'stations-label', type: 'symbol', source: 'stations', minzoom: 12.5,
     layout: { 'text-field': ['get', 'name'], 'text-font': ['Noto Sans Bold'], 'text-size': 12, 'text-offset': [0, 1.2], 'text-anchor': 'top', 'text-optional': true },
     paint: { 'text-color': '#1f2233', 'text-halo-color': '#fff', 'text-halo-width': 2 } });
@@ -176,7 +186,11 @@ async function addLayers() {
   map.addSource('trains', { type: 'geojson', data: { type: 'FeatureCollection', features: [] } });
   map.addLayer({ id: 'trains', type: 'symbol', source: 'trains',
     layout: { 'icon-image': ['concat', 'train-', ['get', 'line']], 'icon-rotate': ['get', 'brg'], 'icon-rotation-alignment': 'map', 'icon-pitch-alignment': 'map',
-      'icon-size': ['interpolate', ['linear'], ['zoom'], 9, 0.55, 12, 0.9, 15, 1.5, 17, 2.2], 'icon-allow-overlap': true, 'icon-ignore-placement': true } });
+      'icon-size': ['interpolate', ['exponential', 2], ['zoom'], 10, 0.28, 13, 0.36, 15.7, 1, 18, 4.9], 'icon-allow-overlap': true, 'icon-ignore-placement': true } });
+  map.addLayer({ id: 'trains-label', type: 'symbol', source: 'trains', minzoom: 14,
+    layout: { 'text-field': ['get', 'line'], 'text-font': ['Noto Sans Bold'], 'text-size': 13, 'text-offset': [1.6, 0], 'text-anchor': 'left',
+      'text-allow-overlap': false, 'text-optional': true },
+    paint: { 'text-color': '#1f2233', 'text-halo-color': '#fff', 'text-halo-width': 2 } });
 
   // cctv
   // CCTV dikelompokkan saat peta jauh, supaya pin tidak menumpuk menutupi pusat kota
@@ -191,7 +205,7 @@ async function addLayers() {
     layout: { 'icon-image': 'cctv', 'icon-size': ['interpolate', ['linear'], ['zoom'], 11, 0.6, 16, 1], 'icon-anchor': 'bottom', 'icon-allow-overlap': true } });
 
   // interaksi
-  for (const id of ['buses', 'buses-label', 'trains', 'stops', 'stations', 'cctv', 'cctv-cluster', 'routes']) {
+  for (const id of ['buses', 'buses-label', 'trains', 'stops', 'stations', 'cctv', 'cctv-cluster']) {
     map.on('mouseenter', id, () => (map.getCanvas().style.cursor = 'pointer'));
     map.on('mouseleave', id, () => (map.getCanvas().style.cursor = ''));
   }
@@ -245,8 +259,8 @@ function addFriends() {
 function applyLayers() {
   const vis = (on) => (on ? 'visible' : 'none');
   const L = state.layers;
-  for (const id of ['buses', 'buses-label', 'routes']) map.setLayoutProperty(id, 'visibility', vis(L.bus));
-  for (const id of ['trains', 'rails', 'rails-casing', 'stations', 'stations-label']) map.setLayoutProperty(id, 'visibility', vis(L.kereta));
+  for (const id of ['buses', 'buses-label', 'route-hl', 'route-hl-casing']) map.setLayoutProperty(id, 'visibility', vis(L.bus));
+  for (const id of ['trains', 'trains-label', 'rail-hl', 'rail-hl-casing', 'stations', 'stations-label']) map.setLayoutProperty(id, 'visibility', vis(L.kereta));
   for (const id of ['stops', 'stops-label']) map.setLayoutProperty(id, 'visibility', vis(L.halte));
   for (const id of ['cctv', 'cctv-cluster', 'cctv-count']) map.setLayoutProperty(id, 'visibility', vis(L.cctv));
   friendMarkers.forEach((m) => (m.getElement().style.display = L.teman ? '' : 'none'));
@@ -561,6 +575,23 @@ function fitCoords(coords, pad = 60) {
   map.fitBounds(b, { padding: mobile ? { top: 70, left: 30, right: 30, bottom: window.innerHeight * sheetSize() + 30 } : pad, maxZoom: 15 });
 }
 
+// Lintasan hanya ditampilkan untuk armada/jalur yang sedang dipilih.
+function showRouteLine(id) {
+  if (!map.getLayer('route-hl')) return;
+  map.setFilter('route-hl', ['==', 'id', id || '']);
+  map.setFilter('route-hl-casing', ['==', 'id', id || '']);
+}
+function showRailLine(id) {
+  if (!map.getLayer('rail-hl')) return;
+  map.setFilter('rail-hl', ['==', 'id', id || '']);
+  map.setFilter('rail-hl-casing', ['==', 'id', id || '']);
+}
+function clearSelection() {
+  showRailLine(null);
+  // di halaman detail rute, garis rutenya tetap tampil
+  showRouteLine(state.tab === 'rute' && state.selectedRoute ? state.selectedRoute : null);
+}
+
 function highlightRoute(id) {
   if (!map.getLayer('route-hl')) return;
   map.setFilter('route-hl', ['==', 'id', id || '']);
@@ -583,9 +614,11 @@ function openRoute(id) {
 function openLine(id) {
   const l = TRAIN.lineById[id];
   fitCoords(l.coords);
+  showRouteLine(null);
   showCard(`<div class="card-head">${icon('train', 48)}<div><b>${esc(l.name)}</b><small>${l.mode} · tiap ~${l.headwayPeak && l.headwayPeak !== l.headway ? `${l.headwayPeak}–${l.headway}` : l.headway} mnt · ${l.stops.length} stasiun</small></div></div>
     <div class="list" style="max-height:220px;overflow:auto">${l.stops.map((s) => `<button class="row" data-st="${esc(s.name)}"><span class="line-badge" style="border-color:${l.color};color:${l.color}">${l.id}</span><span class="txt"><b>${esc(s.name)}</b></span></button>`).join('')}</div>`);
   $('#card').querySelectorAll('[data-st]').forEach((b) => b.addEventListener('click', () => showStation(b.dataset.st.split(' (')[0])));
+  showRailLine(id);
 }
 
 function showStop(i, fly) {
@@ -618,6 +651,8 @@ function showBusCard(p) {
     <div class="bubble">Halte berikutnya: <b>${esc(p.next)}</b></div>
     <button class="pill-btn" style="margin-top:10px" data-open-route="${esc(p.route)}">Lihat rute ${esc(p.short)}</button>`);
   $('#card [data-open-route]').addEventListener('click', () => openRoute(p.route));
+  showRailLine(null);
+  showRouteLine(p.route);
 }
 
 function trainStatus(p) {
@@ -628,6 +663,8 @@ function showTrainCard(p) {
     <div class="bubble" id="trainStatus">${trainStatus(p)}</div>
     <div class="foot-note"><span>Simulasi dari perkiraan jadwal, bukan GPS. Cek papan info di stasiun ya!</span></div>`,
   () => { const f = trainFeats.find((x) => x.properties.id === p.id); const el = $('#trainStatus'); if (f && el) el.innerHTML = trainStatus(f.properties); });
+  showRouteLine(state.tab === 'rute' && state.selectedRoute ? state.selectedRoute : null);
+  showRailLine(p.line);
 }
 
 let cardRefresh = null;
@@ -640,7 +677,7 @@ function showCard(html, refresh) {
   card.querySelector('.x').addEventListener('click', hideCard);
   cardRefresh = refresh || null;
 }
-function hideCard() { $('#card').hidden = true; cardRefresh = null; }
+function hideCard() { $('#card').hidden = true; cardRefresh = null; if (map.getLayer('rail-hl')) clearSelection(); }
 
 function openCam(c, fly) {
   if (fly) map.flyTo({ center: [c.lon, c.lat], zoom: Math.max(map.getZoom(), 15) });
